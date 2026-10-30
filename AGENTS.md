@@ -11,6 +11,7 @@ Guía práctica de trabajo agéntico con GitHub Copilot en VS Code: cómo defini
 | Archivo | Contenido |
 | --- | --- |
 | `README.md` | Entrada: qué hay, ruta de lectura y flujo de implementación. |
+| `flujo-de-trabajo.md` | Procedimiento operativo: fases, puertas de calidad y validación del flujo. |
 | `guia-copilot-vscode.md` | Guía principal: `/new`, `/init`, agente Plan, `/create-instructions`, cierre de tarea. |
 | `archivos-objetivos-especificaciones.md` | Cómo integrar los documentos de contexto en cada fase. |
 | `creacion-objetivos-especificaciones-proyecto.md` | Plantillas de `objetivos-proyecto.md` y `especificaciones-proyecto.md`. |
@@ -26,6 +27,10 @@ Guía práctica de trabajo agéntico con GitHub Copilot en VS Code: cómo defini
 - No dupliques contenido: si el tema ya existe en otro documento, enlázalo.
 - No inventes comandos, versiones ni cifras. Si algo no está verificado, dilo explícitamente.
 - Todo documento que describa comandos lleva su fecha de verificación.
+
+## Flujo de trabajo
+
+Antes de empezar, sigue las fases descritas en `flujo-de-trabajo.md`: alcance, contexto, especificación, plan aprobado, implementación, verificación y cierre. No empieces por la implementación.
 
 ## Verificación obligatoria
 

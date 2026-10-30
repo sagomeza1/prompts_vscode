@@ -14,6 +14,7 @@ Este repositorio es una guía práctica para configurar y desplegar **entornos d
 | [`creacion-objetivos-especificaciones-proyecto.md`](creacion-objetivos-especificaciones-proyecto.md) | Plantillas para generar `objetivos-proyecto.md` y `especificaciones-proyecto.md`. |
 | [`archivos-objetivos-especificaciones.md`](archivos-objetivos-especificaciones.md) | Cómo integrar esos dos documentos como contexto en cada fase (`/new`, `/init`, Modo Plan). |
 | [`instrucciones-y-prompts-para-agentes.md`](instrucciones-y-prompts-para-agentes.md) | Profundiza en la diferencia entre `/init` y `/create-instructions` y ofrece un Prompt Maestro *one-shot*. |
+| [`flujo-de-trabajo.md`](flujo-de-trabajo.md) | Procedimiento operativo: fases, puertas de calidad y registro de validación del flujo. |
 | [`AGENTS.md`](AGENTS.md) | Guía para agentes que editen este repositorio: reglas de edición, verificación y archivos que no se tocan. |
 | [`CHANGELOG.md`](CHANGELOG.md) | Historial de cambios del repositorio. |
 | [`LICENSE`](LICENSE) | CC BY 4.0: puedes reutilizar y adaptar el contenido citando la fuente. |

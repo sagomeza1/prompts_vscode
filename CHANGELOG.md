@@ -13,6 +13,7 @@ consulta en evolución continua, no un paquete de software versionado.
 - `guia-copilot-vscode.md` — nueva sección 7 "Cierre de tarea": verificación con evidencia, revisión del diff, permisos y sandbox, y separación entre reglas deterministas y preferencias.
 - `scripts/check-links.sh` — verificador local de archivos obligatorios, encabezados H1 y enlaces relativos.
 - `.github/workflows/docs-check.yml` — ejecuta la verificación en CI en cada push a `main` y en cada pull request.
+- `flujo-de-trabajo.md` — procedimiento operativo del repositorio: siete fases, puertas de calidad, dos velocidades de trabajo y registro de validación con evidencia (2026-10-30).
 - `README.md` — sección de verificación y referencia a `AGENTS.md`.
 - `LICENSE` — se adopta Creative Commons Attribution 4.0 International (CC BY 4.0) para el contenido del repositorio.
 - `CHANGELOG.md` — este archivo, para llevar registro de cambios relevantes en la guía.

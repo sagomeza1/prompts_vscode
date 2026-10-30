@@ -176,6 +176,60 @@ Todo el código de Python debe seguir estrictamente la guía de estilo PEP 8, us
 
 ---
 
+## 7. Cierre de Tarea | Verificación, Revisión y Permisos
+
+El flujo no termina cuando el agente dice que terminó. Termina cuando hay evidencia de que terminó bien.
+
+### 7.1 Verificación: sin salida verde no hay tarea cerrada
+
+- Define **un comando único** que ejecute pruebas, linter y chequeo de tipos. Si el proyecto no lo tiene, la primera tarea del agente es crearlo.
+- El agente debe **pegar la salida real** del comando. "Debería funcionar" no es verificación.
+- Si la verificación falla, el trabajo sigue abierto: no se entrega con la promesa de arreglarlo después.
+- En este repositorio el comando es `bash scripts/check-links.sh`.
+
+### 7.2 Revisión del diff antes de mergear
+
+Checklist corta, en este orden:
+
+1. **Alcance** — ¿el cambio se limita a lo pedido? Archivos que nadie pidió tocar son una señal de alarma.
+2. **Evidencia** — ¿hay prueba o verificación que respalde el cambio?
+3. **Dependencias** — ¿aparecieron librerías nuevas sin justificar?
+4. **Secretos** — ¿se colaron credenciales, tokens o rutas locales?
+5. **Archivos protegidos** — ¿se tocaron archivos generados o `LICENSE` sin motivo?
+6. **Mensaje de commit** — ¿explica el porqué, no solo el qué?
+
+### 7.3 Permisos y sandbox
+
+**Requieren aprobación explícita del humano:**
+
+- borrar o mover archivos fuera del alcance de la tarea
+- reescribir historia (`git push --force`) o empujar directo a `main`
+- instalar dependencias o ejecutar migraciones de datos
+- cualquier comando de red que use credenciales
+
+**Prohibido por defecto:**
+
+- escribir credenciales en prompts, código o configuración versionada
+- desactivar checks de CI para que pase un cambio
+- ejecutar un comando que no se ha leído entero
+
+Para trabajo autónomo largo, usa un **worktree o contenedor por tarea**: el agente experimenta sin tocar el árbol de trabajo principal.
+
+### 7.4 Lo determinista no se escribe en Markdown
+
+Un archivo de instrucciones es contexto, no un mecanismo de control: el modelo puede saltárselo. Si una regla no admite excepciones, se impone en el arnés.
+
+| Tipo de regla | Dónde se impone |
+| --- | --- |
+| Preferencia de estilo o criterio | `AGENTS.md` o instrucciones del workspace |
+| "Nunca toques `src/generated/**`" | hook previo a la herramienta o regla de lint |
+| "Los tests deben pasar antes de cerrar" | CI obligatorio en la rama |
+| "No instales dependencias sin aprobación" | permiso del agente o revisión obligatoria |
+
+> 💡 Regla práctica: si al escribirla piensas "esto tiene que cumplirse siempre", no la dejes en el prompt.
+
+---
+
 ## Resumen de Comandos y Herramientas
 
 | Comando / Modo | Fase del Proyecto | Salida Principal |

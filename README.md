@@ -14,6 +14,7 @@ Este repositorio es una guía práctica para configurar y desplegar **entornos d
 | [`creacion-objetivos-especificaciones-proyecto.md`](creacion-objetivos-especificaciones-proyecto.md) | Plantillas para generar `objetivos-proyecto.md` y `especificaciones-proyecto.md`. |
 | [`archivos-objetivos-especificaciones.md`](archivos-objetivos-especificaciones.md) | Cómo integrar esos dos documentos como contexto en cada fase (`/new`, `/init`, Modo Plan). |
 | [`instrucciones-y-prompts-para-agentes.md`](instrucciones-y-prompts-para-agentes.md) | Profundiza en la diferencia entre `/init` y `/create-instructions` y ofrece un Prompt Maestro *one-shot*. |
+| [`AGENTS.md`](AGENTS.md) | Guía para agentes que editen este repositorio: reglas de edición, verificación y archivos que no se tocan. |
 | [`CHANGELOG.md`](CHANGELOG.md) | Historial de cambios del repositorio. |
 | [`LICENSE`](LICENSE) | CC BY 4.0: puedes reutilizar y adaptar el contenido citando la fuente. |
 
@@ -61,8 +62,20 @@ Para tareas complejas o flujos de trabajo muy concretos dentro del desarrollo, p
 * Asegúrate de que el agente tenga visibilidad completa del contexto de los archivos `.md` antes de ejecutar comandos de generación de código.
 * Revisa el plan que propone el agente en Modo Plan antes de aprobar la ejecución.
 * Revalida la guía cuando actualices VS Code o GitHub Copilot: los comandos y su comportamiento cambian.
+* Cierra cada tarea con evidencia: verificación ejecutada y diff revisado (sección 7 de la guía).
+* Si una regla no admite excepciones, no la dejes solo en el prompt: llévala a un hook, un lint o CI.
 
 ---
+
+## ✅ Verificación
+
+Los cambios de documentación se comprueban antes de cerrar:
+
+```bash
+bash scripts/check-links.sh
+```
+
+Valida archivos obligatorios, un solo `H1` por documento y enlaces relativos. Corre también en CI en cada push a `main` y en cada pull request.
 
 ## 📄 Licencia
 

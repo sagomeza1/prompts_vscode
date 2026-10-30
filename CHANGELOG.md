@@ -9,6 +9,11 @@ consulta en evolución continua, no un paquete de software versionado.
 ## [Unreleased]
 
 ### Added
+- `AGENTS.md` — guía para agentes: mapa del repositorio, reglas de edición, verificación obligatoria y archivos que no se tocan.
+- `guia-copilot-vscode.md` — nueva sección 7 "Cierre de tarea": verificación con evidencia, revisión del diff, permisos y sandbox, y separación entre reglas deterministas y preferencias.
+- `scripts/check-links.sh` — verificador local de archivos obligatorios, encabezados H1 y enlaces relativos.
+- `.github/workflows/docs-check.yml` — ejecuta la verificación en CI en cada push a `main` y en cada pull request.
+- `README.md` — sección de verificación y referencia a `AGENTS.md`.
 - `LICENSE` — se adopta Creative Commons Attribution 4.0 International (CC BY 4.0) para el contenido del repositorio.
 - `CHANGELOG.md` — este archivo, para llevar registro de cambios relevantes en la guía.
 - `README.md` — mapa de documentos y ruta de lectura recomendada.
@@ -23,6 +28,7 @@ consulta en evolución continua, no un paquete de software versionado.
 
 ### Fixed
 - Enlaces internos del `README.md` que apuntaban a un documento distinto del que anunciaba su texto.
+- `archivos-objetivos-especificaciones.md` y `creacion-objetivos-especificaciones-proyecto.md`: se añade el H1 que faltaba para cumplir la convención de un solo título por documento.
 
 ### Removed
 - `guia.md` — contenido incorporado a `guia-copilot-vscode.md`.

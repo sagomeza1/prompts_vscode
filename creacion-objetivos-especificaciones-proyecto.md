@@ -1,3 +1,5 @@
+# Plantillas para objetivos y especificaciones de proyecto
+
 Aquí tienes la propuesta de estructura para el prompt del sistema. He diseñado las plantillas de los archivos Markdown con un estándar profesional de ingeniería de software, ideal para que los agentes de GitHub Copilot comprendan el contexto sin ambigüedades.
 
 Dado que **no has suministrado información previa sobre el proyecto** en tu mensaje, he dejado la sección de información en blanco y, justo abajo, te planteo las preguntas necesarias para completarla antes de que dispares el prompt en tu nueva sesión.

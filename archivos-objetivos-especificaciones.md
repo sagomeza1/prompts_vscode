@@ -1,3 +1,5 @@
+# Documentos de contexto: objetivos y especificaciones
+
 Para integrar documentos de diseño existentes como `objetivos.md` o `especificaciones.md` en el flujo de automatización con GitHub Copilot, debes utilizarlos como **fuentes de contexto primario** mediante el mecanismo de referencias de archivo (utilizando el símbolo `#` o `@file` en la interfaz de chat).
 
 A continuación, se detalla la estrategia de ingeniería de prompts para acoplar estos archivos a los comandos `/new`, `/init` y al Modo Plan de manera efectiva.

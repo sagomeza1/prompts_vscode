@@ -9,9 +9,9 @@ Esta guía unifica el flujo de trabajo secuencial y avanzado para inicializar, e
 ## Flujo de Trabajo Secuencial
 
 ```text
-[0. Planificación] ──> [1. /new] ─────────> [2. /init] ─────────> [3. Modo Plan] ─────────> [4. /create-instructions]
-Alcance y            Scaffolding          Gobernanza            Lógica de Negocio         Especialización
-Requisitos           Inicial              Global (.github)      @workspace (Agente)       Subcarpetas (applyTo)
+[0. Planificación] ──> [1. /new] ─────────> [2. /init] ─────────> [3. /plan] ─────────────> [4. /create-instructions]
+Alcance y            Scaffolding          Instrucciones         Lógica de Negocio         Especialización
+Requisitos           Inicial              de workspace          (agente Plan)             Subcarpetas (applyTo)
 ```
 
 ### Paso 0: Definición del Alcance y Requisitos
@@ -40,47 +40,53 @@ Le indicas a Copilot qué tipo de aplicación deseas (puede invocarse también c
 
 ---
 
-## 2. `/init` | Establecimiento de la Gobernanza y Reglas Globales
+## 2. `/init` | Instrucciones Persistentes del Workspace
 
-Una vez generada la estructura, el comando `/init` en Copilot Chat se utiliza para inicializar configuraciones del entorno de desarrollo y reglas globales que guiarán el comportamiento de la IA y el equipo.
+Una vez generada la estructura, `/init` en Copilot Chat **genera o actualiza las instrucciones del workspace** en una sesión de agente local. No es un instalador de entorno: no crea `Dockerfile`, ni `.gitignore`, ni `.vscode/settings.json`.
 
 ### Propósito Técnico
 
-Crear el archivo de configuración global de Copilot (`.github/copilot-instructions.md`) o configuraciones del espacio de trabajo (`.vscode/settings.json`), asegurando que cualquier interacción posterior respete el stack, idioma y estándares definidos.
+Producir el archivo de instrucciones persistentes (`.github/copilot-instructions.md`; también se soporta `AGENTS.md`) para que cualquier interacción posterior respete el stack, idioma y estándares definidos.
 
 ### Cómo funciona
 
-Ayuda a preparar el entorno de ejecución del proyecto: puede generar configuraciones para Git (`.gitignore`), Docker (`Dockerfile`), linters y ajustes de VS Code, entre otros.
+Analiza el código y los documentos del workspace y propone un archivo de instrucciones que puedes revisar y editar antes de aceptarlo. Para configuraciones de entorno (Docker, linters, ajustes de VS Code), pídeselas al agente en un prompt normal: ya no son parte de `/init`.
+
+> ⚠️ **Cambio respecto a versiones anteriores:** `/init` se describía como inicializador de configuraciones del entorno. Hoy su alcance es exclusivamente las instrucciones del workspace.
 
 ### Ejemplo de Prompt para Copilot Chat
 
 ```text
-@workspace /init Genera un archivo de gobernanza global para el espacio de trabajo en .github/copilot-instructions.md. Especifica que el idioma oficial del código y documentación es inglés, que todo el código Python debe cumplir estrictamente con PEP 8, que se prefiere la programación funcional sobre el estado mutable cuando sea posible, y que todas las funciones deben incluir type hints y docstrings en formato Google.
+/init Genera un archivo de gobernanza global para el espacio de trabajo en .github/copilot-instructions.md. Especifica que el idioma oficial del código y documentación es inglés, que todo el código Python debe cumplir estrictamente con PEP 8, que se prefiere la programación funcional sobre el estado mutable cuando sea posible, y que todas las funciones deben incluir type hints y docstrings en formato Google.
 ```
 
 ---
 
-## 3. Agente en Modo Plan (`@workspace`) | Desarrollo Estructurado de la Lógica de Negocio
+## 3. Agente Plan (`/plan`) | Desarrollo Estructurado de la Lógica de Negocio
 
-El **Modo Plan** de GitHub Copilot (activado mediante `@workspace` en la interfaz de chat de tipo Agente) divide la ejecución del código en dos fases críticas: **Planificación** y **Ejecución**.
+El **agente Plan** divide la ejecución del código en dos fases críticas: **Planificación** y **Ejecución**. Se invoca con `/plan` en el chat o seleccionando **Plan** en el selector de agentes.
+
+> ⚠️ **`@workspace` está deprecado.** Los *chat participants* ya no están soportados en el harness Copilot. El agente ve el workspace por sí mismo; si necesitas dirigir el contexto, adjúntalo con `#codebase`, `#file` o `#folder`. En versiones antiguas esto se hacía con `@workspace`.
 
 ### Flujo de Aprobación y Ejecución
 
-1. **Fase de Planificación:** el agente analiza el espacio de trabajo (`@workspace`), interpreta el requerimiento y propone una lista secuencial de cambios detallando qué archivos se crearán o modificarán.
+1. **Fase de Planificación:** el agente analiza el espacio de trabajo, interpreta el requerimiento y propone una lista secuencial de cambios detallando qué archivos se crearán o modificarán.
 2. **Revisión del Usuario:** el desarrollador evalúa el plan propuesto, solicita ajustes si es necesario y otorga su aprobación explícita.
 3. **Fase de Ejecución:** con la aprobación dada, el agente procede a implementar el código de manera iterativa, aplicando refactorizaciones y solicitando confirmación al finalizar el bloque de tareas.
 
-### Ejemplo de Prompt para el Agente (`@workspace`)
+### Ejemplo de Prompt para el Agente (`/plan`)
 
 ```text
-@workspace En modo plan, diseña e implementa el módulo de 'data_ingestion' en 'src/data_ingestion/'. Necesito una clase 'DataDownloader' que descargue archivos CSV desde una URL, maneje excepciones de conexión mediante reintentos exponenciales y guarde el archivo en 'data/raw/'. Muestra primero el plan de archivos antes de escribir el código.
+/plan Diseña e implementa el módulo de 'data_ingestion' en 'src/data_ingestion/'. Necesito una clase 'DataDownloader' que descargue archivos CSV desde una URL, maneje excepciones de conexión mediante reintentos exponenciales y guarde el archivo en 'data/raw/'. Muestra primero el plan de archivos antes de escribir el código.
 ```
 
 ---
 
 ## 4. `/create-instructions` | Segmentación y Especialización mediante `applyTo`
 
-Para proyectos de gran envergadura, las reglas globales no son suficientes. El comando `/create-instructions` genera archivos de instrucciones (`.instructions.md` / `.copilot-instructions.md`) específicos para directorios determinados dentro del repositorio.
+Para proyectos de gran envergadura, las reglas globales no son suficientes. El comando `/create-instructions` genera archivos de instrucciones (`.github/instructions/**/*.instructions.md`) específicos para directorios determinados dentro del repositorio.
+
+> ⚠️ Disponible solo en **sesiones de agente Local**. En el harness Copilot no aparece; allí se usan `/prompts` y `/hooks`.
 
 ### Propósito Técnico
 
@@ -142,10 +148,10 @@ A continuación, se simula cómo interactuar con el Prompt Maestro utilizando lo
 
 **Resultado generado por el Prompt Maestro:**
 
-#### A. Prompt optimizado para `@workspace /new` (Estructura del Proyecto)
+#### A. Prompt optimizado para `/new` (Estructura del Proyecto)
 
 ```text
-@workspace /new Crea un proyecto modular de Python para un pipeline de Machine Learning (clasificación con el dataset Iris). Estructura el proyecto con la siguiente arquitectura:
+/new Crea un proyecto modular de Python para un pipeline de Machine Learning (clasificación con el dataset Iris). Estructura el proyecto con la siguiente arquitectura:
 - Una carpeta 'src' que contenga módulos para:
   - 'data_ingestion.py' (para cargar los datos).
   - 'features.py' (para preprocesamiento y escalado).
@@ -155,10 +161,10 @@ A continuación, se simula cómo interactuar con el Prompt Maestro utilizando lo
 Todo el código de Python debe seguir estrictamente la guía de estilo PEP 8, usar anotaciones de tipo (type hinting) y funciones documentadas.
 ```
 
-#### B. Prompt optimizado para configuración con `/init` (Configuración de Entorno)
+#### B. Prompt optimizado para `/init` (Instrucciones del Workspace)
 
 ```text
-@workspace /init Genera los archivos de configuración iniciales para este proyecto de Python:
+/init Genera el archivo de instrucciones del workspace. Además, en el mismo prompt, pide los archivos de configuración iniciales para este proyecto de Python:
 1. Un archivo 'requirements.txt' que incluya las versiones estables más recientes de scikit-learn, pandas, numpy y pytest.
 2. Un archivo '.gitignore' estándar optimizado para Python (que ignore .venv, __pycache__, .pytest_cache y archivos .pyc).
 3. Una guía de estilo básica para el linter de VS Code en '.vscode/settings.json' que configure el formateador 'black' o 'autopep8' al guardar.
@@ -235,8 +241,47 @@ Un archivo de instrucciones es contexto, no un mecanismo de control: el modelo p
 | Comando / Modo | Fase del Proyecto | Salida Principal |
 | --- | --- | --- |
 | `/new` | Inicialización | Estructura de directorios y archivos base del proyecto. |
-| `/init` | Configuración | Archivo de gobernanza global (`.github/copilot-instructions.md`). |
-| `@workspace` (Modo Plan) | Desarrollo Activo | Implementación guiada, iterativa y segura de la lógica de negocio. |
-| `/create-instructions` | Optimización / Escala | Reglas contextuales por carpeta (`applyTo`) con *Glob Patterns*. |
+| `/init` | Configuración | Instrucciones del workspace (`.github/copilot-instructions.md` o `AGENTS.md`). |
+| `/plan` (agente Plan) | Desarrollo Activo | Implementación guiada, iterativa y segura de la lógica de negocio. |
+| `/create-instructions` | Optimización / Escala | Reglas contextuales por carpeta (`applyTo`) en `.github/instructions/**`. |
+
+---
+
+## 6. Mapa de Comandos Vigentes (verificado 2026-10-30)
+
+La lista real depende del *surface* (Chat view, editor, CLI), del *harness* y de tu plan. Escribe `/` en el chat para ver la tuya. Estos son los comandos documentados hoy:
+
+**Flujo y estructura del proyecto**
+
+| Comando | Qué hace |
+| --- | --- |
+| `/new`, `/newNotebook` | Crea el scaffolding de un workspace, archivo o notebook. |
+| `/plan` | Investiga y propone un plan de implementación. |
+| `/init` | Genera o actualiza las instrucciones del workspace (sesión de agente local). |
+| `/create-instructions` | Genera una personalización `.instructions.md` con `applyTo` (sesión local). |
+| `/create-agent`, `/create-skill`, `/create-prompt`, `/create-hook` | Generan esa personalización concreta. |
+| `/agents`, `/instructions`, `/skills`, `/prompts`, `/hooks` | Abren el editor de la personalización correspondiente. |
+
+**Desarrollo diario**
+
+| Comando | Qué hace |
+| --- | --- |
+| `/explain`, `/fix`, `/tests` | Explican código, proponen una corrección o generan pruebas. |
+| `/doc` | Genera comentarios de documentación desde el chat inline del editor. |
+| `/setupTests` (experimental) | Ayuda a elegir y configurar un framework de pruebas. |
+
+**Sesión y diagnóstico**
+
+| Comando | Qué hace |
+| --- | --- |
+| `/clear` | Empieza un chat nuevo y archiva el actual. |
+| `/compact` | Compacta el contexto de la conversación. |
+| `/fork` | Bifurca la conversación conservando su historial. |
+| `/rename <nombre>`, `/help` | Renombra el chat o lista comandos y agentes. |
+| `/models`, `/tools` | Abren el selector de modelo o la configuración de herramientas. |
+| `/troubleshoot`, `/debug`, `/sandbox` | Analizan logs del agente, abren la vista de depuración o inspeccionan la política de sandbox. |
+| `/<nombre>` | Invoca una skill o un prompt reutilizable por su nombre. |
+
+> ⛔ **Retirado:** `@workspace` y el resto de *chat participants* (`@vscode`, `@terminal`, `@github`). No están soportados en el harness Copilot; su función la cubren el agente y las menciones `#codebase`, `#file`, `#folder`.
 
 > Ver también [instrucciones-y-prompts-para-agentes.md](instrucciones-y-prompts-para-agentes.md) para la diferencia detallada entre `/init` y `/create-instructions`, y [creacion-objetivos-especificaciones-proyecto.md](creacion-objetivos-especificaciones-proyecto.md) para plantillas de documentos de contexto previos.

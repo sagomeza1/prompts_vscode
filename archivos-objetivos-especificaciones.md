@@ -2,7 +2,7 @@
 
 Para integrar documentos de diseño existentes como `objetivos.md` o `especificaciones.md` en el flujo de automatización con GitHub Copilot, debes utilizarlos como **fuentes de contexto primario** mediante el mecanismo de referencias de archivo (utilizando el símbolo `#` o `@file` en la interfaz de chat).
 
-A continuación, se detalla la estrategia de ingeniería de prompts para acoplar estos archivos a los comandos `/new`, `/init` y al Modo Plan de manera efectiva.
+A continuación, se detalla la estrategia de ingeniería de prompts para acoplar estos archivos a los comandos `/new`, `/init` y al agente Plan (`/plan`) de manera efectiva.
 
 ---
 
@@ -49,14 +49,14 @@ Utiliza los documentos para extraer métricas de éxito o restricciones arquitec
 
 ---
 
-## 3. Con el Agente en Modo Plan (`@workspace`)
+## 3. Con el Agente Plan (`/plan`)
 
-Esta es la integración más potente. Cuando le pides al agente que desarrolle la lógica del negocio, el contexto global (`@workspace`) a veces puede pasar por alto detalles minuciosos de los archivos de texto. Al referenciarlos explícitamente, obligas al modelo a realizar una validación cruzada antes de proponer el plan de ejecución.
+Esta es la integración más potente. Aunque el agente indexa el workspace por su cuenta, puede pasar por alto detalles minuciosos de los archivos de texto. Referenciarlos explícitamente con `#file` o `#codebase` obliga al modelo a validar cruzado antes de proponer el plan de ejecución. Al referenciarlos explícitamente, obligas al modelo a realizar una validación cruzada antes de proponer el plan de ejecución.
 
 ### Técnica de Prompting
 
 ```text
-@workspace En modo plan, diseñemos la lógica del primer hito técnico. Revisa detalladamente #especificaciones.md para asegurar que los requerimientos funcionales del módulo 'data_ingestion' se cumplan al 100%. Genera el plan de archivos y funciones necesarias, contrastando tu propuesta contra las metas descritas en #objetivos.md antes de escribir cualquier línea de código.
+/plan Diseña la lógica del primer hito técnico. Revisa detalladamente #especificaciones.md para asegurar que los requerimientos funcionales del módulo 'data_ingestion' se cumplan al 100%. Genera el plan de archivos y funciones necesarias, contrastando tu propuesta contra las metas descritas en #objetivos.md antes de escribir cualquier línea de código.
 
 ```
 
@@ -66,4 +66,4 @@ Esta es la integración más potente. Cuando le pides al agente que desarrolle l
 
 * **Prioridad de Documentos:** Si ambos documentos entran en contradicción, especifica en tu prompt cuál tiene mayor jerarquía: *"En caso de conflicto en los requerimientos, prioriza lo dictado en #especificaciones.md"*.
 * **Ubicación Inicial:** Coloca `objetivos.md` y `especificaciones.md` en la raíz del espacio de trabajo antes de abrir el chat de Copilot. Esto garantiza que la indexación local de VS Code los reconozca inmediatamente al usar el comando `#`.
-* **Actualización Dinámica:** Si las especificaciones cambian a mitad del proyecto, actualiza el archivo físico y vuelve a ejecutar un prompt con `@workspace` para que el agente re-evalúe el código existente frente a la nueva versión del documento.
+* **Actualización Dinámica:** Si las especificaciones cambian a mitad del proyecto, actualiza el archivo físico y vuelve a pedírselo al agente Plan (`/plan`) para que re-evalúe el código existente frente a la nueva versión del documento.

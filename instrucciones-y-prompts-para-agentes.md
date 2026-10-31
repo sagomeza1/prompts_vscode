@@ -8,9 +8,9 @@ Esta guía detalla cómo sacar el máximo provecho a los comandos de inicializac
 
 Ambos comandos sirven para automatizar la creación de directrices dentro de tu espacio de trabajo, pero tienen propósitos y alcances muy distintos:
 
-### Comando ``/init`` (Inicialización Global)
+### Comando ``/init`` (Instrucciones del Workspace)
 
-Este comando se utiliza al inicio del ciclo de vida del proyecto o cuando se establece el espacio de trabajo por primera vez. Su objetivo es estructurar el archivo maestro ``.github/copilot-instructions.md``.
+Se utiliza al inicio del ciclo de vida del proyecto o cuando cambian las reglas del workspace. Su objetivo es generar o actualizar el archivo maestro de instrucciones (``.github/copilot-instructions.md``, o ``AGENTS.md``). No crea estructura de directorios ni archivos de entorno: eso se le pide al agente en un prompt aparte.
 
 - **Sugerencia de enfoque**: No le pidas detalles de implementación de lógica de negocio. En su lugar, utilízalo para definir el **Stack Tecnológico**, la **Arquitectura del Software**, las **Reglas de Estilo de Código** y las **Restricciones Generales** (por ejemplo, prohibir ciertas librerías obsoletas).
 
@@ -20,7 +20,7 @@ Este comando se utiliza al inicio del ciclo de vida del proyecto o cuando se est
 
 ### Comando ``/create-instructions`` (Instrucciones Contextuales)
 
-Este comando se utiliza para crear archivos ``.instructions.md`` dentro de subcarpetas o para módulos específicos del repositorio, limitando su alcance mediante metadatos (como ``applyTo``).
+Crea archivos ``.instructions.md`` dentro de subcarpetas o para módulos específicos del repositorio, limitando su alcance mediante metadatos (como ``applyTo``). Vive en ``.github/instructions/**/*.instructions.md`` y solo está disponible en sesiones de agente **Local**.
 
 - **Sugerencia de enfoque**: Utilízalo para automatizar flujos de trabajo repetitivos, políticas de testing para un framework concreto, o integraciones específicas de APIs. Sé extremadamente específico con los directorios donde debe actuar.
 

@@ -108,8 +108,11 @@ El flujo se probó sobre una copia temporal del repositorio, con el verificador 
 
 Cada prueba se ejecutó en `/tmp/flowtest`, una copia del árbol, y los cambios se revirtieron con `git checkout`. La rama de trabajo no se ensució.
 
-### Qué queda fuera de esta validación
+### Ejecución real en CI
 
-- **GitHub Actions en un runner real**: se validaron el YAML y el comando que ejecuta, no una ejecución en la infraestructura de GitHub. La primera ejecución ocurrirá al abrir el pull request.
+El workflow ya corrió en los runners de GitHub sobre `main`: dos ejecuciones `push`, ambas con conclusión **success** (`41152177163` y `41152210527`, 2026-10-31T00:48-00:49Z). Con eso queda cerrada la única puerta que faltaba comprobar de punta a punta.
+
+### Qué queda fuera de esta validación
 - **Enlaces externos**: solo se comprueban los relativos. Una URL puede morir sin que el verificador lo detecte.
+- **Ramas protegidas**: la ejecución directa sobre `main` funciona hoy porque no hay protección de rama; si se activa, el flujo pasa a requerir pull request.
 - **Calidad editorial**: el verificador comprueba forma, no que lo escrito sea correcto o esté actualizado.
